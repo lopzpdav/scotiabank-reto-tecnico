@@ -16,6 +16,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class RetoTecnicoAdapterTest {
     private StudentRepository studentRepository;
 
     StudentDto studentDto;
-    public enum TestResponseCodesStatusEnum {CREATED_201, CONFLICT_409, OK_200, NO_CONTENT_204}
+    public enum TestResponseCodesStatusEnum {CREATED_201, OK_200, NO_CONTENT_204, BAD_REQUEST_400, CONFLICT_409,}
 
     @ParameterizedTest
     @EnumSource(TestResponseCodesStatusEnum.class)
@@ -61,7 +62,21 @@ public class RetoTecnicoAdapterTest {
 
             case CONFLICT_409:
                 studentDto = StudentDto.builder()
+                        .id(100L)
+                        .name("TestName")
+                        .lastName("TestLastName")
+                        .status("1")
+                        .age(23)
                         .build();
+                when(studentRepository.save(any(StudentEntity.class))).thenReturn(Mono.empty());
+                when(studentRepository.findStudentById(anyLong())).thenReturn(Mono.just(StudentEntity.builder()
+                        .id(100L)
+                        .name("TestName")
+                        .lastName("TestLastName")
+                        .status("1")
+                        .age(23)
+                        .created(LocalDateTime.now())
+                        .build()));
                 client.post().uri(API_REQUEST.concat("/save"))
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .accept(MediaType.APPLICATION_JSON_UTF8)
@@ -69,6 +84,15 @@ public class RetoTecnicoAdapterTest {
                         .exchange()
                         .expectStatus().is4xxClientError();
 
+                case BAD_REQUEST_400:
+                studentDto = StudentDto.builder()
+                        .build();
+                client.post().uri(API_REQUEST.concat("/save"))
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .body(Mono.just(studentDto), StudentDto.class)
+                        .exchange()
+                        .expectStatus().is4xxClientError();
             default:
 
         }
@@ -80,7 +104,7 @@ public class RetoTecnicoAdapterTest {
         switch (testCodesStatusEnum) {
             case OK_200:
                 List<StudentEntity> listStudent = new ArrayList<>();
-                listStudent.add(new StudentEntity(1L, "TestName", "TestLastName", "1", 18, null));
+                listStudent.add(new StudentEntity(1L, "TestName", "TestLastName", "1", 18, LocalDateTime.now()));
                 when(studentRepository.findAllByStatus(any())).thenReturn(Flux.fromIterable(listStudent));
                 client.get()
                         .uri(API_REQUEST.concat("/active"))
