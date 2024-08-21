@@ -37,13 +37,13 @@ public class StudentRepositoryAdapter implements StudentRepositoryPort {
     public Flux<StudentDTO> getAllActiveStudents() {
         return studentRepository.findAllByStatus(StatusEnum.ACTIVE.getCod())
                 .map(studentMapper::toDto)
-                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NO_CONTENT, NO_ACTIVE_FOUND_MESSAGE)));
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, NO_ACTIVE_FOUND_MESSAGE)));
     }
 
     @Override
     public Flux<StudentDTO> getAllStudents() {
         return studentRepository.findAll()
                 .map(studentMapper::toDto)
-                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NO_CONTENT, NO_STUDENTS_FOUND_MESSAGE)));
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, NO_STUDENTS_FOUND_MESSAGE)));
     }
 }

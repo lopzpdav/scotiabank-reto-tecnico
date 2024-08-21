@@ -16,7 +16,6 @@ import static com.springboot.retotecnico.application.constants.StudentConstants.
 @Slf4j
 @RestController
 @RequestMapping(API_REQUEST)
-@Validated
 @RequiredArgsConstructor
 public class StudentController {
     private final StudentUseCase studentUseCase;

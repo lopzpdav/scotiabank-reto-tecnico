@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.support.WebExchangeBindException;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collections;
 import java.util.List;
@@ -44,6 +45,18 @@ public class StudentExceptionHandler {
                 .code(status.value())
                 .error(status.getReasonPhrase())
                 .message(lisErrors)
+                .build();
+        return new ResponseEntity<>(resultException, status);
+    }
+
+    @ExceptionHandler(ResponseStatusException.class)
+    @ResponseStatus
+    public ResponseEntity<ErrorResponseDTO> responseStatusException(ResponseStatusException ex) {
+        HttpStatus status = ex.getStatus();
+        ErrorResponseDTO resultException = ErrorResponseDTO.builder()
+                .code(status.value())
+                .error(status.getReasonPhrase())
+                .message(Collections.singletonList(ex.getReason()))
                 .build();
         return new ResponseEntity<>(resultException, status);
     }

@@ -11,13 +11,6 @@ import org.springframework.web.reactive.config.EnableWebFlux;
 
 @EnableWebFlux
 @SpringBootApplication
-@OpenAPIDefinition(
-		info = @Info(
-				title = "API Documentation Code Challenge",
-				version = "1.0.0"
-		),
-		servers = @Server(url = "${config.path}")
-)
 public class RetoTecnicoApplication {
 
 	public static void main(String[] args) {

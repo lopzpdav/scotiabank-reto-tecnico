@@ -14,8 +14,3 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
     enabled: true
-
-config:
-  path: "http://localhost:${server.port}"
-  base:
-    endpoint: "${config.path}/api/v1/"
