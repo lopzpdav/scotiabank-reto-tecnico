@@ -1,10 +1,9 @@
-package com.springboot.retotecnico.domain.dto;
+package com.springboot.retotecnico.application.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -14,10 +13,9 @@ import java.io.Serializable;
 
 @Builder
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StudentDto implements Serializable {
+public class StudentDTO implements Serializable {
     @NotNull(message = "ID no debe ser nulo")
     @Min(value = 1, message = "ID debe ser mayor o igual que 1")
     private Long id;

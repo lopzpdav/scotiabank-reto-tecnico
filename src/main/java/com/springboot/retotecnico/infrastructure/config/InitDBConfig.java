@@ -9,7 +9,7 @@ import org.springframework.r2dbc.connection.init.ConnectionFactoryInitializer;
 import org.springframework.r2dbc.connection.init.ResourceDatabasePopulator;
 
 @Configuration
-public class DataBaseConfig {
+public class InitDBConfig {
 
     @Bean
     ConnectionFactoryInitializer initializer(ConnectionFactory connectionFactory) {
@@ -19,7 +19,6 @@ public class DataBaseConfig {
 
         CompositeDatabasePopulator populator = new CompositeDatabasePopulator();
         populator.addPopulators(new ResourceDatabasePopulator(new ClassPathResource("db/migration/createTable.sql")));
-//		populator.addPopulators(new ResourceDatabasePopulator(new ClassPathResource("db/migration/insertTable.sql")));
         initializer.setDatabasePopulator(populator);
 
         return initializer;

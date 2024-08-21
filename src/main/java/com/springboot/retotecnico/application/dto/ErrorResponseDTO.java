@@ -1,4 +1,4 @@
-package com.springboot.retotecnico.domain.models.response;
+package com.springboot.retotecnico.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
@@ -9,9 +9,8 @@ import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Getter
-@Setter
 @Builder
-public class ErrorResponse {
+public class ErrorResponseDTO {
     private Integer code;
     private String error;
     private List<String> message;

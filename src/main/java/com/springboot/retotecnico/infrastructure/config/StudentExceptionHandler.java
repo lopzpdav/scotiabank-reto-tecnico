@@ -1,7 +1,7 @@
 package com.springboot.retotecnico.infrastructure.config;
 
 import com.springboot.retotecnico.domain.exceptions.StudentFoundException;
-import com.springboot.retotecnico.domain.models.response.ErrorResponse;
+import com.springboot.retotecnico.application.dto.ErrorResponseDTO;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -23,9 +23,9 @@ public class StudentExceptionHandler {
 
     @ExceptionHandler(StudentFoundException.class)
     @ResponseStatus
-    public ResponseEntity<ErrorResponse> studentFoundException(StudentFoundException ex) {
+    public ResponseEntity<ErrorResponseDTO> studentFoundException(StudentFoundException ex) {
         HttpStatus status = HttpStatus.CONFLICT;
-        ErrorResponse resultException = ErrorResponse.builder()
+        ErrorResponseDTO resultException = ErrorResponseDTO.builder()
                 .code(status.value())
                 .error(status.getReasonPhrase())
                 .message(Collections.singletonList(ex.getMessage()))
@@ -35,12 +35,12 @@ public class StudentExceptionHandler {
 
     @ExceptionHandler(WebExchangeBindException.class)
     @ResponseStatus
-    public ResponseEntity<ErrorResponse> webExchangeBindException(WebExchangeBindException ex) {
+    public ResponseEntity<ErrorResponseDTO> webExchangeBindException(WebExchangeBindException ex) {
         BindingResult bindingResult = ex.getBindingResult();
         HttpStatus status = HttpStatus.BAD_REQUEST;
         List<String> lisErrors = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.toList());
 
-        ErrorResponse resultException = ErrorResponse.builder()
+        ErrorResponseDTO resultException = ErrorResponseDTO.builder()
                 .code(status.value())
                 .error(status.getReasonPhrase())
                 .message(lisErrors)

@@ -1,7 +1,7 @@
 package com.springboot.retotecnico;
 
-import com.springboot.retotecnico.domain.dto.StudentDto;
-import com.springboot.retotecnico.infrastructure.adapter.entities.StudentEntity;
+import com.springboot.retotecnico.application.dto.StudentDTO;
+import com.springboot.retotecnico.domain.entities.StudentEntity;
 import com.springboot.retotecnico.infrastructure.adapter.repository.StudentRepository;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.springboot.retotecnico.domain.constants.StudentConstants.API_REQUEST;
+import static com.springboot.retotecnico.application.constants.StudentConstants.API_REQUEST;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -36,7 +36,7 @@ public class RetoTecnicoAdapterTest {
     @MockBean
     private StudentRepository studentRepository;
 
-    StudentDto studentDto;
+    StudentDTO studentDto;
     public enum TestResponseCodesStatusEnum {CREATED_201, OK_200, NO_CONTENT_204, BAD_REQUEST_400, CONFLICT_409,}
 
     @ParameterizedTest
@@ -44,7 +44,7 @@ public class RetoTecnicoAdapterTest {
     void save(TestResponseCodesStatusEnum testCodesStatusEnum) {
         switch (testCodesStatusEnum) {
             case CREATED_201:
-                studentDto = StudentDto.builder()
+                studentDto = StudentDTO.builder()
                         .id(100L)
                         .name("TestName")
                         .lastName("TestLastName")
@@ -56,12 +56,12 @@ public class RetoTecnicoAdapterTest {
                 client.post().uri(API_REQUEST.concat("/save"))
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .accept(MediaType.APPLICATION_JSON_UTF8)
-                        .body(Mono.just(studentDto), StudentDto.class)
+                        .body(Mono.just(studentDto), StudentDTO.class)
                         .exchange()
                         .expectStatus().isCreated();
 
             case CONFLICT_409:
-                studentDto = StudentDto.builder()
+                studentDto = StudentDTO.builder()
                         .id(100L)
                         .name("TestName")
                         .lastName("TestLastName")
@@ -80,17 +80,17 @@ public class RetoTecnicoAdapterTest {
                 client.post().uri(API_REQUEST.concat("/save"))
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .accept(MediaType.APPLICATION_JSON_UTF8)
-                        .body(Mono.just(studentDto), StudentDto.class)
+                        .body(Mono.just(studentDto), StudentDTO.class)
                         .exchange()
                         .expectStatus().is4xxClientError();
 
                 case BAD_REQUEST_400:
-                studentDto = StudentDto.builder()
+                studentDto = StudentDTO.builder()
                         .build();
                 client.post().uri(API_REQUEST.concat("/save"))
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .accept(MediaType.APPLICATION_JSON_UTF8)
-                        .body(Mono.just(studentDto), StudentDto.class)
+                        .body(Mono.just(studentDto), StudentDTO.class)
                         .exchange()
                         .expectStatus().is4xxClientError();
             default:
@@ -112,7 +112,7 @@ public class RetoTecnicoAdapterTest {
                         .exchange()
                         .expectStatus().isOk()
                         .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .expectBodyList(StudentDto.class);
+                        .expectBodyList(StudentDTO.class);
 
             case NO_CONTENT_204:
                 when(studentRepository.findAllByStatus(any())).thenReturn(Flux.empty());
@@ -139,7 +139,7 @@ public class RetoTecnicoAdapterTest {
                         .exchange()
                         .expectStatus().isOk()
                         .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .expectBodyList(StudentDto.class);
+                        .expectBodyList(StudentDTO.class);
 
             case NO_CONTENT_204:
                 when(studentRepository.findAll()).thenReturn(Flux.empty());

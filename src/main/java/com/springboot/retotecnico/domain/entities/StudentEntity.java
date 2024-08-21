@@ -1,4 +1,4 @@
-package com.springboot.retotecnico.infrastructure.adapter.entities;
+package com.springboot.retotecnico.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
@@ -9,13 +9,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 
-@Entity
-@Getter
-@Setter
 @Builder
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@Entity
 @Table(name = "student")
 public class StudentEntity {
     @Id

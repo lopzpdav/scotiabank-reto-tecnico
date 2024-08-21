@@ -1,4 +1,4 @@
-package com.springboot.retotecnico.domain.enums;
+package com.springboot.retotecnico.application.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

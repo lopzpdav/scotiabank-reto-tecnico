@@ -1,6 +1,6 @@
 package com.springboot.retotecnico.infrastructure.adapter.repository;
 
-import com.springboot.retotecnico.infrastructure.adapter.entities.StudentEntity;
+import com.springboot.retotecnico.domain.entities.StudentEntity;
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;

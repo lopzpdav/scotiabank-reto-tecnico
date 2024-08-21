@@ -1,30 +1,21 @@
 server:
-    port: 8083
+    port: 8085
 
 spring:
   r2dbc:
-    url: r2dbc:h2:file:///./test;MODE=MySQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE;
+    url: r2dbc:h2:mem:///escueladb?options=DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     username: sa
     password: password
-  security:
-    user:
-      name: user
-      password: 1234
+    initialization-mode: always
 
 springdoc:
   api-docs:
     path: /v1/api-docs
   swagger-ui:
     path: /swagger-ui.html
+    enabled: true
 
-h2-server:
-  port: 8081
-
-logging:
-  level:
-    root: INFO
-
-# jwt:
-#   secret: 2024
-#   timeExpire: 120
-#   acceptExpire: 30
+config:
+  path: "http://localhost:${server.port}"
+  base:
+    endpoint: "${config.path}/api/v1/"
