@@ -14,6 +14,10 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import static com.springboot.retotecnico.application.constants.StudentConstants.NO_ACTIVE_FOUND_MESSAGE;
+import static com.springboot.retotecnico.application.constants.StudentConstants.NO_STUDENTS_FOUND_MESSAGE;
+import static com.springboot.retotecnico.application.constants.StudentConstants.STUDENT_FOUND_MESSAGE;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -24,7 +28,7 @@ public class StudentRepositoryAdapter implements StudentRepositoryPort {
     @Override
     public Mono<Void> saveStudent(StudentDTO studentDto) {
         return studentRepository.findStudentById(studentDto.getId())
-                .flatMap(existingStudent -> Mono.error(new StudentFoundException(String.format("Student with id <%s> already exists", studentDto.getId()))))
+                .flatMap(existingStudent -> Mono.error(new StudentFoundException(String.format(STUDENT_FOUND_MESSAGE, studentDto.getId()))))
                 .switchIfEmpty(studentRepository.save(studentMapper.toEntity(studentDto)))
                 .then();
     }
@@ -33,13 +37,13 @@ public class StudentRepositoryAdapter implements StudentRepositoryPort {
     public Flux<StudentDTO> getAllActiveStudents() {
         return studentRepository.findAllByStatus(StatusEnum.ACTIVE.getCod())
                 .map(studentMapper::toDto)
-                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NO_CONTENT, "No active students found")));
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NO_CONTENT, NO_ACTIVE_FOUND_MESSAGE)));
     }
 
     @Override
     public Flux<StudentDTO> getAllStudents() {
         return studentRepository.findAll()
                 .map(studentMapper::toDto)
-                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NO_CONTENT, "No students found")));
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NO_CONTENT, NO_STUDENTS_FOUND_MESSAGE)));
     }
 }
