@@ -36,7 +36,7 @@ public class RetoTecnicoAdapterTest {
     private StudentRepository studentRepository;
 
     StudentDTO studentDto;
-    public enum TestResponseCodesStatusEnum {CREATED_201, OK_200, NO_CONTENT_204, BAD_REQUEST_400, CONFLICT_409,}
+    public enum TestResponseCodesStatusEnum {CREATED_201, OK_200, NOT_FOUND_404, BAD_REQUEST_400, CONFLICT_409,}
 
     @ParameterizedTest
     @EnumSource(TestResponseCodesStatusEnum.class)
@@ -113,12 +113,12 @@ public class RetoTecnicoAdapterTest {
                         .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
                         .expectBodyList(StudentDTO.class);
 
-            case NO_CONTENT_204:
+            case NOT_FOUND_404:
                 when(studentRepository.findAllByStatus(any())).thenReturn(Flux.empty());
                 client.get()
                         .uri(API_REQUEST.concat("/active"))
                         .exchange()
-                        .expectStatus().isNoContent();
+                        .expectStatus().isNotFound();
             default:
 
         }
@@ -140,12 +140,12 @@ public class RetoTecnicoAdapterTest {
                         .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
                         .expectBodyList(StudentDTO.class);
 
-            case NO_CONTENT_204:
+            case NOT_FOUND_404:
                 when(studentRepository.findAll()).thenReturn(Flux.empty());
                 client.get()
                         .uri(API_REQUEST.concat("/all"))
                         .exchange()
-                        .expectStatus().isNoContent();
+                        .expectStatus().isNotFound();
             default:
 
         }
